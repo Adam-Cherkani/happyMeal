@@ -108,6 +108,29 @@
   object-fit: cover;
 }
 
+.search-container {
+  padding-left: 0.5rem;
+}
+
+#suggestions {
+  margin-top: 8px;
+  border: 1px solid #ccc;
+  border-top: none;
+  background: white;
+  position: absolute;
+  z-index:1;
+}
+
+#suggestions div {
+  padding: 8px;
+  cursor: pointer;
+  border-top: 1px solid #ccc;
+}
+
+#suggestions div:hover {
+  background-color: #f0f0f0;
+}
+
 
 
 @media screen and (max-width: 900px) {
