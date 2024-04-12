@@ -19,8 +19,8 @@ async function displayRecipes(page) {
                     <img class="recipe-image" src="${recipe.image}">
                     <div class="recipe-info">
                         <h2>${recipe.nom}</h2>
-                        <p>${recipe.categorie}</p>
-                        <p>Temps de préparation : ${
+                        <p class="recipe-categorie">${recipe.categorie}</p>
+                        <p class="recipe-prepa">Temps de préparation : ${
                           recipe.temps_preparation
                         }</p>
                         <ul>
@@ -132,8 +132,15 @@ function attachFavEvent() {
 
             const parentRecipes = this.parentNode;
             const recipeId = parentRecipes.querySelector('.recipeId').value;
+            const recipeImage = parentRecipes.querySelector('.recipe-image').value;
+            const recipeNom = parentRecipes.querySelector('.recipe-info h2').textContent;
+            const recipeCategorie = parentRecipes.querySelector('.recipe-categorie').textContent;
+
             const idJson = {
-                id : recipeId
+                id : recipeId, 
+                image : recipeImage,
+                nom : recipeNom,
+                categorie : recipeCategorie
             };
 
             let existingFavList = localStorage.getItem('favRecipes');
