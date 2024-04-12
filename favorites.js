@@ -18,8 +18,6 @@ function loadFavorites() {
     return favorites;
 }
 
-
-
 async function displayFavorites() {
     const favorites = loadFavorites();
     const recipes = await fetchRecipes();
@@ -66,14 +64,13 @@ async function displayFavorites() {
                     `).join('')}
                 </ul>
             </div>
+            <i class="ri-heart-line addFav"></i>
         </div>
         <ul class="steps">
             ${recipe.etapes
               .map((etape) => `<li>${etape}</li><br>`)
               .join("")}
-        </ul>
-        <button class="addFav">Favoris</button>
-        
+        </ul>        
         `;
         displaySection.appendChild(recipeElement);
     });
@@ -81,9 +78,6 @@ async function displayFavorites() {
     attachFavEvent();
     attachEventListeners();
 }
-
-
-
 
  function checkFavRecipes() {
 
@@ -170,8 +164,3 @@ function attachFavEvent() {
         };
     });
 }
-
-
-
-
-
