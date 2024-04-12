@@ -15,7 +15,7 @@ async function displayRecipes(page) {
         display.innerHTML += `
             <article class="recipe">
                 <div class="recipe-banner">
-                <input class="recipeId" type="hidden" value="${recipe.id}"></input>
+                    <input class="recipeId" type="hidden" value="${recipe.id}"></input>
                     <img class="recipe-image" src="${recipe.image}">
                     <div class="recipe-info">
                         <h2>${recipe.nom}</h2>
@@ -33,13 +33,13 @@ async function displayRecipes(page) {
                             `).join('')}
                         </ul>
                     </div>
+                    <i class="ri-heart-line addFav"></i>
                 </div>
                 <ul class="steps">
                     ${recipe.etapes
                       .map((etape) => `<li>${etape}</li><br>`)
                       .join("")}
                 </ul>
-                <button class="addFav">Favoris</button>
             </article>
             `;
       });
@@ -89,6 +89,13 @@ function attachEventListeners() {
     const addBtns = document.querySelectorAll(".addBtn");
     addBtns.forEach(btn => {
         btn.addEventListener('click', function () {
+
+            const originalContent = this.innerHTML;
+
+            this.innerHTML = '<i class="ri-check-line"></i>';
+            setTimeout(() => {
+                this.innerHTML = originalContent;
+            }, 500);
 
             const ingredient = this.parentNode;
             const nom = ingredient.querySelector('.nom').textContent;
