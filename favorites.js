@@ -94,16 +94,7 @@ async function displayFavorites() {
     }
 }
 
-function initPagination() {
-  const paginationControls = document.querySelector("#pagination-controls");
-  paginationControls.innerHTML = `
-    <button class='paginationBtn' onclick="displayRecipes(1)">Page 1</button>
-    <button class='paginationBtn' onclick="displayRecipes(2)">Page 2</button>
-    `;
-  displayRecipes(1);
-}
 
-initPagination();
 
 function attachEventListeners() {
     const addBtns = document.querySelectorAll(".addBtn");
@@ -138,34 +129,38 @@ function attachEventListeners() {
 attachEventListeners();
 
 function attachFavEvent() {
-    let addFavBtn = document.querySelectorAll('.addFav');
-    addFavBtn.forEach(button => {
-        button.addEventListener('click', function() {
+    const addFavBtns = document.querySelectorAll('.addFav');
 
-            const parentRecipes = this.parentNode;
-            const recipeId = parentRecipes.querySelector('.recipeId').value;
-            const idJson = {
-                id : recipeId
-            };
-
-            let existingFavList = localStorage.getItem('favRecipes');
-            if (!existingFavList) {
-                existingFavList = [];
-            } else {
-                existingFavList = JSON.parse(existingFavList);
+    addFavBtns.forEach(button => {
+        button.onclick = function() { 
+            const parentArticle = this.closest('article');
+            if (!parentArticle) {
+                console.error("Article parent non trouvé");
+                return;
             }
 
+            const recipeId = parentArticle.querySelector('.recipeId').value;
+            if (!recipeId) {
+                console.error("ID de recette non trouvé");
+                return;
+            }
+    
+
+            let existingFavList = JSON.parse(localStorage.getItem('favRecipes')) || [];
             const existingRecipeIndex = existingFavList.findIndex(item => item.id === recipeId);
+   
 
             if (existingRecipeIndex === -1) {
-                existingFavList.push(idJson);
+                existingFavList.push({ id: recipeId });
                 this.classList.add('colored');
             } else {
                 existingFavList.splice(existingRecipeIndex, 1);
                 this.classList.remove('colored');
+                parentArticle.remove(); 
             }
 
             localStorage.setItem('favRecipes', JSON.stringify(existingFavList));
-        });
+
+        };
     });
 }
