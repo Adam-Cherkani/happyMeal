@@ -44,7 +44,6 @@ const dragStop = () => {
   carousel.classList.remove("dragging");
 };
 const infiniteScroll = () => {
-  console.log(carousel.scrollLeft);
   if (carousel.scrollLeft === 0) {
     carousel.classList.add("no-transition");
     carousel.scrollLeft = -1000;
