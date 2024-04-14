@@ -135,3 +135,16 @@ header nav {
 .dropdown-menu ul button:hover {
     color: white;
 }
+
+.search-icon {
+  width: 10%;
+  height: 100%;
+  border-right: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-icon:hover {
+  cursor: pointer;
+}

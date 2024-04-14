@@ -13,7 +13,7 @@ async function displayRecipes(page) {
 
       paginatedRecipes.forEach((recipe) => {
         display.innerHTML += `
-            <article class="recipe">
+            <article class="recipe" id="_${recipe.id}">
                 <div class="recipe-banner">
                     <input class="recipeId" type="hidden" value="${recipe.id}"></input>
                     <img class="recipe-image" src="${recipe.image}">
@@ -156,4 +156,13 @@ function attachFavEvent() {
             localStorage.setItem('favRecipes', JSON.stringify(existingFavList));
         });
     });
+}
+
+let anchorId = window.location.hash;
+if (anchorId) {
+    let blabla = document.getElementById(anchorId);
+    blabla.scrollIntoView({
+        behavior: 'smooth'
+    });
+    console.log(blabla);
 }

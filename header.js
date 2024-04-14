@@ -1,3 +1,5 @@
+// ------------------  Afficher la liste avec dropdownMenu -------------------- //
+
 document.addEventListener("DOMContentLoaded", function() {
   const dropdownMenu = document.querySelector("#dropdownMenu");
   const dropdownList = document.querySelector("#dropdownList");
@@ -23,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
       dropdownMenu.classList.toggle("show");
   });
 
+  // ------------------  Fonction de suppression item par item -------------------- //
 
   dropdownList.addEventListener('click', function(event) {
       if (event.target.classList.contains('delBtn')) {
@@ -34,6 +37,8 @@ document.addEventListener("DOMContentLoaded", function() {
       }
   });
 });
+
+// ------------------  Affichage de la liste avec dropdownMenu pour mise à jour après suppression d'un élément -------------------- //
 
 function displayIngredients() {
   const dropdownList = document.querySelector("#dropdownList");
@@ -56,6 +61,9 @@ function displayIngredients() {
 
 displayIngredients();
 
+
+// ------------------ SearchBar dynamique -------------------- //
+
 document.addEventListener("DOMContentLoaded", function() {
   const searchInput = document.getElementById('search-input');
   const suggestionsPanel = document.createElement('div');
@@ -73,13 +81,15 @@ document.addEventListener("DOMContentLoaded", function() {
                       return recette.nom.toLowerCase().includes(input.toLowerCase()) ||
                              recette.ingredients.some(ing => ing.nom.toLowerCase().includes(input.toLowerCase()));
                   });
-                  suggestions.forEach(function(suggested) {
-                      const div = document.createElement('div');
-                      div.innerHTML = suggested.nom;
-                      div.addEventListener('click', function() {
-                          window.location.href = `recipes.html#${suggested.id}`;
-                      });
-                      suggestionsPanel.appendChild(div);
+                  
+                  suggestions.forEach(function(suggested, event) {
+
+                      const suggestionsDiv = document.createElement('div');
+                      suggestionsDiv.innerHTML = `
+                      <a href="recipes.html#_${suggested.id}">${suggested.nom}</a>
+                      <input type="hidden" value=${suggested.id}></input>
+                      `;
+                      suggestionsPanel.appendChild(suggestionsDiv);
                   });
                   if (suggestions.length === 0) {
                       suggestionsPanel.innerHTML = '<div>Aucun résultat trouvé</div>';
@@ -95,3 +105,10 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 });
 
+// ------------------  redirection au clic sur l'icone loupe sur toute autre page que recipes.html -------------------- //
+
+let searchIcon = document.querySelector(".search-icon");
+
+searchIcon.addEventListener('click', function() {
+    window.location.href = 'recipes.html';
+});
