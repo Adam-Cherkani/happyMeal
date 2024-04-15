@@ -1,5 +1,5 @@
 let currentPage = 1;
-let recipesPerPage = 9;
+let recipesPerPage = 9; 
 
 async function displayRecipes(page) {
   await fetch("data.json")
@@ -7,9 +7,18 @@ async function displayRecipes(page) {
     .then((data) => {
       const recipes = data.recettes;
       const display = document.querySelector("#display");
-      const start = (page - 1) * recipesPerPage;
-      const end = page * recipesPerPage;
-      const paginatedRecipes = recipes.slice(start, end);
+      let paginatedRecipes;
+
+      if (page === 1) {
+        paginatedRecipes = recipes.slice(0, 9);
+      } else if (page === 2) {
+        paginatedRecipes = recipes.slice(-5);
+      } else {
+        console.error("Page non gérée");
+        return;
+      }
+
+      display.innerHTML = "";
 
       paginatedRecipes.forEach((recipe) => {
         display.innerHTML += `
@@ -24,21 +33,23 @@ async function displayRecipes(page) {
                           recipe.temps_preparation
                         }</p>
                         <ul>
-                            ${recipe.ingredients.map(ingredient => `
+                            ${recipe.ingredients
+                              .map(
+                                (ingredient) => `
                                 <li class="ingredient">
                                     <span class="nom">${ingredient.nom}</span>
                                     <span class="quantite">${ingredient.quantite}</span>
                                     <button class="addBtn">+</button>
                                 </li>
-                            `).join('')}
+                            `
+                              )
+                              .join("")}
                         </ul>
                     </div>
                     <i class="ri-heart-line addFav"></i>
                 </div>
                 <ul class="steps">
-                    ${recipe.etapes
-                      .map((etape) => `<li>${etape}</li><br>`)
-                      .join("")}
+                    ${recipe.etapes.map((etape) => `<li>${etape}</li><br>`).join("")}
                 </ul>
             </article>
             `;
@@ -46,18 +57,15 @@ async function displayRecipes(page) {
       checkFavRecipes();
       attachFavEvent();
       attachEventListeners();
-    })
-    .then(() => {
-        if (page === 1) {
-            currentPage = 2;
-        }
-    })
-    .then(() => {
-      if (currentPage === 2) {
-        recipesPerPage = 5;
-      }
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
     });
 }
+
+displayRecipes(1);
 
 async function checkFavRecipes() {
 
@@ -132,8 +140,15 @@ function attachFavEvent() {
 
             const parentRecipes = this.parentNode;
             const recipeId = parentRecipes.querySelector('.recipeId').value;
+            const recipeImage = parentRecipes.querySelector('.recipe-image').value;
+            const recipeNom = parentRecipes.querySelector('.recipe-info h2').textContent;
+            const recipeCategorie = parentRecipes.querySelector('.recipe-categorie').textContent;
+
             const idJson = {
-                id : recipeId
+                id : recipeId, 
+                image : recipeImage,
+                nom : recipeNom,
+                categorie : recipeCategorie
             };
 
             let existingFavList = localStorage.getItem('favRecipes');
