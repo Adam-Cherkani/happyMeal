@@ -1,5 +1,38 @@
+var Calendar = FullCalendar.Calendar;
+var Draggable = FullCalendar.Draggable;
+
+let list = JSON.parse(localStorage.getItem("favRecipes"));
+
+function createRecipeList() {
+  let containerEl = document.getElementById("external-events-list");
+
+  containerEl.innerHTML = "";
+
+  list.forEach((element) => {
+    let recipeDiv = document.createElement("div");
+    recipeDiv.classList.add("fc-event");
+
+    recipeDiv.textContent = element.nom;
+
+    recipeDiv.setAttribute(
+      "data-event",
+      JSON.stringify({
+        id: element.id,
+        title: element.nom,
+        start: "2024-04-11",
+      })
+    );
+
+    containerEl.appendChild(recipeDiv);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", function () {
-  const calendarEl = document.querySelector("#calendar");
+  createRecipeList();
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+  let calendarEl = document.querySelector("#calendar");
 
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: "dayGridMonth",
@@ -8,44 +41,28 @@ document.addEventListener("DOMContentLoaded", function () {
       center: "title",
       right: "dayGridMonth,timeGridWeek,timeGridDay,listWeek",
     },
-    events: [
-      {
-        id: "a",
-        title: "my event",
-        start: "2024-04-11",
-      },
-    ],
+    events: list,
     editable: true,
+
     eventDrop: function (info) {
-      console.log("Event dropped:", info.event);
+      alert(
+        info.event.title + " was dropped on " + info.event.start.toISOString()
+      );
     },
 
     eventClick: function (info) {
       info.event.remove();
     },
   });
+
   calendar.render();
 
-  const draggableItem = document.querySelector("#draggable-item");
-  new FullCalendar.Draggable(draggableItem, {
-    eventData: {
-      title: "My Draggable Event",
-      start: new Date(),
+  let containerEl = document.getElementById("external-events-list");
+  new Draggable(containerEl, {
+    itemSelector: ".fc-event",
+    eventData: function (eventEl) {
+      return JSON.parse(eventEl.getAttribute("data-event"));
     },
-  });
-
-  let list = JSON.parse(localStorage.getItem("List", "nom"));
-
-  let ul = document.querySelector(".ul");
-  list.forEach((element) => {
-    let li = document.createElement("li");
-
-    li.classList.add("draggable-item");
-
-    li.innerHTML = `${element.nom}`;
-    ul.appendChild(li);
-
-    console.log(element);
   });
 });
 
